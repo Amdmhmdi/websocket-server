@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WebSocket Client</title>
+    </head>
+    <body>
+        <h1>WebSocket Client</h1>
+        <p id="status">Connecting...</p>
+
+        <script>
+            // اتصال به سرور WebSocket محلی
+            const ws = new WebSocket('ws://localhost:8080'); // به آدرس سرور WebSocket شما
+            
+            // وقتی که اتصال برقرار شد
+            ws.onopen = () => {
+                document.getElementById('status').textContent = 'Connected to WebSocket server';
+                ws.send('Hello Server!'); // ارسال پیام به سرور
+            };
+
+            // دریافت پیام از سرور
+            ws.onmessage = (event) => {
+                console.log('Message from server:', event.data);
+            };
+
+            // اگر خطا در اتصال WebSocket پیش بیاید
+            ws.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+                document.getElementById('status').textContent = 'Error connecting to server';
+            };
+
+            // وقتی که اتصال بسته می‌شود
+            ws.onclose = () => {
+                console.log('Disconnected from WebSocket server');
+                document.getElementById('status').textContent = 'Disconnected from WebSocket server';
+            };
+
+            ws.onmessage = function(event) {
+                console.log("Message from server: " + event.data);
+                document.getElementById("messages").innerHTML += "<p>" + event.data + "</p>";
+            };
+            
+        </script>
+    </body>
+</html>
